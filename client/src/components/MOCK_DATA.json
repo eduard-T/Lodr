@@ -1,0 +1,116 @@
+[
+  {
+    "id": "10363-0551",
+    "first_name": "Amara",
+    "last_name": "Ofer",
+    "loads": [
+      {
+        "route": "Toronto to Quebec",
+        "cost": "209.89",
+        "revenue": "635.78"
+      },
+      {
+        "route": "Toronto to Windsor",
+        "cost": "20.44",
+        "revenue": "65.19"
+      }
+    ]
+  },
+  {
+    "id": "17856-0759",
+    "first_name": "Elsy",
+    "last_name": "Hannay",
+    "loads": [
+      {
+        "route": "Vaughan to Quebec",
+        "cost": "9.89",
+        "revenue": "35.05"
+      }
+    ]
+  },
+  {
+    "id": "53241-020",
+    "first_name": "Selie",
+    "last_name": "Herculeson",
+    "loads": []
+  },
+  {
+    "id": "52125-864",
+    "first_name": "Marshal",
+    "last_name": "Tiuit",
+    "loads": [
+      {
+        "route": "Canada to USA",
+        "cost": "2339.89",
+        "revenue": "6835.78"
+      }
+    ]
+  },
+  {
+    "id": "54868-5118",
+    "first_name": "Brittan",
+    "last_name": "End",
+    "loads": [
+      {
+        "route": "Somewhere to Anywhere",
+        "cost": "45.89",
+        "revenue": "99.78"
+      },
+      {
+        "route": "Japan to Quebec",
+        "cost": "449.89",
+        "revenue": "9875.78"
+      }
+    ]
+  },
+  {
+    "id": "44946-1009",
+    "first_name": "Kelci",
+    "last_name": "Carnalan",
+    "loads": [
+      {
+        "route": "Toronto to Cali",
+        "cost": "569.89",
+        "revenue": "6775.78"
+      },
+      {
+        "route": "Toronto to Quebec",
+        "cost": "209.89",
+        "revenue": "635.78"
+      }
+    ]
+  },
+  {
+    "id": "49349-277",
+    "first_name": "Cam",
+    "last_name": "Bernaciak",
+    "loads": []
+  },
+  {
+    "id": "51346-261",
+    "first_name": "Erinna",
+    "last_name": "Lilleycrop",
+    "loads": [
+      {
+        "route": "Here to Quebec",
+        "cost": "349.45",
+        "revenue": "565.00"
+      },
+      {
+        "route": "Toronto to Here",
+        "cost": "229.89",
+        "revenue": "905.82"
+      },
+      {
+        "route": "Lala to Lele",
+        "cost": "77.90",
+        "revenue": "1995.78"
+      },
+      {
+        "route": "Bora to Texas",
+        "cost": "26.88",
+        "revenue": "875.78"
+      }
+    ]
+  }
+]

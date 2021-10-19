@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import "./styles.css";
+
+//components
+import OrdersComponent from "./components/Orders";
+import DriversComponent from "./components/Drivers";
 
 const App = () => {
   const [data, setData] = useState(null);
@@ -13,10 +16,13 @@ const App = () => {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>{!data ? "Loading..." : data}</p>
+      <header>
+        <h1 className="header__title">Driver Manager</h1>
       </header>
+      <main className="wrapper">
+        <OrdersComponent />
+        <DriversComponent />
+      </main>
     </div>
   );
 };
