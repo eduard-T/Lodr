@@ -11,6 +11,8 @@ const Card = ({
   titleWeight,
   titleColor,
   style,
+  onDragOver,
+  onDrop,
 }) => {
   return (
     <div
@@ -22,6 +24,8 @@ const Card = ({
         maxHeight: maxHeight || "auto",
         ...style,
       }}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
     >
       <p
         style={{

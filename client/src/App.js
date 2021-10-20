@@ -14,6 +14,8 @@ const App = () => {
       .then((data) => setData(data.message));
   }, []);
 
+  console.log(`data`, data);
+
   return (
     <div className="App">
       <header>

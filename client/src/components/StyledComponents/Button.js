@@ -1,7 +1,36 @@
 import React from "react";
 
-const Button = () => {
-  return <div></div>;
+const Button = ({
+  onClick,
+  type,
+  title,
+  id,
+  backgroundColor,
+  textColor,
+  width,
+  style,
+}) => {
+  return (
+    <button
+      style={{
+        backgroundColor: backgroundColor || "rgb(24, 60, 143)",
+        border: "none",
+        color: textColor || "white",
+        fontSize: "16px",
+        fontWeight: "600",
+        padding: "10px",
+        borderRadius: "3px",
+        width: width,
+        ...style,
+      }}
+      className="button"
+      type={type}
+      onClick={onClick}
+      id={id}
+    >
+      {title}
+    </button>
+  );
 };
 
 export default Button;
