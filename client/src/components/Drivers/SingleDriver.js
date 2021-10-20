@@ -8,7 +8,6 @@ const SingleDriver = ({ driver }) => {
   const name = `${driver.first_name} ${driver.last_name}`;
 
   const handleDragStart = (event, obj, current) => {
-    event.dataTransfer.effectAllowed = "move";
     console.log(obj);
     event.dataTransfer.setData("load", JSON.stringify(obj));
     console.log(current);
@@ -19,12 +18,11 @@ const SingleDriver = ({ driver }) => {
     event.preventDefault();
   };
 
-  const handleOnDrop = (event, driver) => {
-    event.dataTransfer.dropEffect = "move";
+  const handleOnDrop = (event, target) => {
     let load = JSON.parse(event.dataTransfer.getData("load"));
     console.log(load);
-    console.log(driver);
-    driver.loads.push(load);
+    console.log(target);
+    target.loads.push(load);
   };
 
   return (
@@ -36,29 +34,21 @@ const SingleDriver = ({ driver }) => {
       onDragOver={(event) => handleDragOver(event)}
       onDrop={(event) => handleOnDrop(event, driver)}
     >
-      <div style={{ marginTop: "20px" }}>
+      <div className="singleDriver">
         {driver && driver.loads && driver.loads.length ? (
           driver.loads.map((load, index) => {
             return (
               <SingleOrder
+                key={index}
                 load={load}
                 handleDragStart={handleDragStart}
-                currentDriver={driver}
-                key={index}
+                currentTarget={driver}
+                assigned={true}
               />
             );
           })
         ) : (
-          <p
-            style={{
-              textAlign: "center",
-              color: "grey",
-              fontSize: 16,
-              padding: "100px 20px",
-            }}
-          >
-            No Loads
-          </p>
+          <p className="singleDriver--empty">No Loads</p>
         )}
       </div>
     </Card>

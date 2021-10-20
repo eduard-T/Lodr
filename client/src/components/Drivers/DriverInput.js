@@ -3,29 +3,26 @@ import React from "react";
 //components
 import TextInput from "../StyledComponents/TextInput";
 
-const OrderInput = ({ updateInput, load }) => {
+const DriverInput = ({ updateInput }) => {
   return (
     <>
       <TextInput
-        name="route"
-        placeholder="Add the route..."
-        defaultValue={load && load.route ? load.route : null}
+        name="firstName"
+        placeholder="First Name"
         borderType="none"
-        width={"40%"}
+        width={"35%"}
         onBlur={(event) => updateInput(event.target.id, event.target.value)}
       />
       <TextInput
-        name="cost"
-        placeholder="Cost of the load..."
-        defaultValue={load && load.cost ? load.cost : null}
+        name="lastName"
+        placeholder="Last Name"
         borderType="none"
-        width={"30%"}
+        width={"35%"}
         onBlur={(event) => updateInput(event.target.id, event.target.value)}
       />
       <TextInput
-        name="revenue"
-        placeholder="Load revenue..."
-        defaultValue={load && load.revenue ? load.revenue : null}
+        name="licenseType"
+        placeholder="License Type"
         borderType="none"
         width={"30%"}
         onBlur={(event) => updateInput(event.target.id, event.target.value)}
@@ -34,4 +31,4 @@ const OrderInput = ({ updateInput, load }) => {
   );
 };
 
-export default OrderInput;
+export default DriverInput;

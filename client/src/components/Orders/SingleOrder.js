@@ -2,22 +2,33 @@ import React, { useState } from "react";
 
 //components
 import OrderInput from "./OrderInput";
+import IconButton from "../StyledComponents/IconButton";
 
-const SingleOrder = ({ load, handleDragStart, currentDriver }) => {
+const SingleOrder = ({ load, handleDragStart, currentTarget, assigned }) => {
   const [editing, setEditing] = useState(false);
+  const [input, setInput] = useState({});
 
-  const toggleEdit = () => {
-    setEditing(!editing);
+  const updateInput = (key, value) => {
+    let tempInput = { ...input };
+
+    tempInput[key] = value;
+    setInput(tempInput);
   };
 
   const updateLoad = () => {
     console.log("Saved");
+    setEditing(false);
+  };
+
+  const handleRemove = () => {
+    console.log("Removed");
   };
 
   return (
     <div
+      className="singleOrder"
       draggable={editing ? false : true}
-      onDragStart={(event) => handleDragStart(event, load, currentDriver)}
+      onDragStart={(event) => handleDragStart(event, load, currentTarget)}
       onMouseDown={(event) => {
         if (!editing) {
           event.target.style.cursor = "grabbing";
@@ -29,63 +40,50 @@ const SingleOrder = ({ load, handleDragStart, currentDriver }) => {
         }
       }}
       style={{
-        border: "1px solid black",
-        borderRadius: "3px",
-        margin: "5px 0",
         padding: editing ? 0 : "10px",
-        display: "flex",
-        justifyContent: "space-between",
-        cursor: "grab",
       }}
     >
       {editing ? (
-        <OrderInput />
-      ) : (
-        <>
-          <img
-            style={{
-              width: "15px",
-              height: "16px",
-              marginRight: "10px",
-              display: "flex",
-              alignSelf: "center",
-              opacity: 0.5,
-            }}
-            src="/drag-icon.png"
-            alt="Drag Icon"
+        <div className="singleOrder__content">
+          <OrderInput updateInput={updateInput} load={load} />
+          <IconButton
+            source="/save-icon.png"
+            alt="Save icon"
+            onClick={updateLoad}
+            right="10px"
           />
-          <p
-            style={{
-              fontSize: 14,
-              width: "40%",
-              wordBreak: "break-word",
-              paddingRight: "5px",
-            }}
-          >
-            {load.route}
-          </p>
+        </div>
+      ) : (
+        <div className="singleOrder__content">
+          <img
+            className="singleOrder__dragIcon"
+            draggable={false}
+            src="/drag-indicator.png"
+            alt="Drag indicator icon"
+          />
 
-          <p
-            style={{
-              fontSize: 14,
-              color: "red",
-              width: "30%",
-              padding: "0 5px",
-            }}
-          >
-            ${load.cost}
-          </p>
-          <p
-            style={{
-              fontSize: 14,
-              color: "green",
-              width: "30%",
-              paddingLeft: "5px",
-            }}
-          >
-            ${load.revenue}
-          </p>
-        </>
+          <p className="singleOrder__content--text route">{load.route}</p>
+          <p className="singleOrder__content--text cost">${load.cost}</p>
+          <p className="singleOrder__content--text revenue">${load.revenue}</p>
+
+          {!assigned && !editing ? (
+            <IconButton
+              source="/edit-icon.png"
+              alt="Edit icon"
+              onClick={() => setEditing(true)}
+              right="0"
+            />
+          ) : (
+            <IconButton
+              source="/remove-icon.png"
+              alt="Remove icon"
+              onClick={handleRemove}
+              width="10px"
+              height="10px"
+              right="0"
+            />
+          )}
+        </div>
       )}
     </div>
   );

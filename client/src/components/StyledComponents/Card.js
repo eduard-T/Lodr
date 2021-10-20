@@ -16,12 +16,16 @@ const Card = ({
 }) => {
   return (
     <div
-      className="card"
       style={{
         minWidth: minWidth || "auto",
         maxWidth: maxWidth || "auto",
         minHeight: minHeight || "auto",
         maxHeight: maxHeight || "auto",
+        borderRadius: "10px",
+        backgroundColor: "white",
+        wordBreak: "break-word",
+        boxShadow: "1px 3px 15px 0 rgba(0, 0, 0, 0.1)",
+        padding: "10px",
         ...style,
       }}
       onDragOver={onDragOver}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 //components
 import Card from "../StyledComponents/Card";
@@ -7,6 +7,7 @@ import OrderInput from "./OrderInput";
 import SingleOrder from "./SingleOrder";
 
 const OrdersComponent = () => {
+  const [orders, setOrders] = useState([]);
   const [input, setInput] = useState({});
 
   const updateInput = (key, value) => {
@@ -16,43 +17,74 @@ const OrdersComponent = () => {
     setInput(tempInput);
   };
 
-  let load = {
+  const handleDragStart = (event, obj, current) => {
+    console.log(obj);
+    event.dataTransfer.setData("load", JSON.stringify(obj));
+    console.log(current);
+    //create logic to splice the load from the current array and add it to the dropped array
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
+  const handleOnDrop = (event, target) => {
+    let load = JSON.parse(event.dataTransfer.getData("load"));
+    console.log(load);
+    console.log(target);
+    target.push(load);
+  };
+
+  let tempLoad = {
     route: "Your Location to My Location",
     cost: "987.37",
     revenue: "1078.22",
   };
+
+  useEffect(() => {
+    let temp = [...orders];
+
+    temp.push(tempLoad);
+    setOrders(temp);
+  }, []);
+
   return (
     <Card
-      style={{ margin: "5rem 0" }}
+      style={{ margin: "50px 0" }}
       title="Create an Order"
-      minHeight={300}
+      minHeight={155}
       titleSize={24}
       titleWeight="700"
+      onDragOver={(event) => handleDragOver(event)}
+      onDrop={(event) => handleOnDrop(event, orders)}
     >
-      <div
-        style={{
-          display: "flex",
-          border: "2px solid royalblue",
-          borderRadius: "3px",
-          marginTop: "15px",
-        }}
-      >
+      <div className="orders__input">
         <OrderInput updateInput={updateInput} />
       </div>
-      <div style={{ float: "right", margin: "10px 0 10px 10px" }}>
+      <div className="orders__input--button">
         <Button title="Create Order" onClick={() => console.log("Clicked")} />
       </div>
-      <p
-        style={{
-          fontSize: 18,
-          fontWeight: "500",
-          padding: "30px 0 10px",
-          wordBreak: "break-word",
-        }}
-      >
-        Unassigned Orders
-      </p>
-      <SingleOrder load={load} />
+      {orders && !!orders.length && (
+        <>
+          <header className="orders__list--header">
+            <p className="orders__list--title">Unassigned Orders</p>
+            <p className="orders__list--description">
+              // Drag and drop to assign
+            </p>
+          </header>
+
+          {orders.map((load, index) => {
+            return (
+              <SingleOrder
+                key={index}
+                load={load}
+                handleDragStart={handleDragStart}
+                currentTarget={orders}
+              />
+            );
+          })}
+        </>
+      )}
     </Card>
   );
 };

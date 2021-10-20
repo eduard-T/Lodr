@@ -4,6 +4,7 @@ const TextInput = ({
   onBlur,
   placeholder,
   name,
+  defaultValue,
   id,
   width,
   borderWidth,
@@ -23,13 +24,14 @@ const TextInput = ({
           fontSize: "15px",
           borderRadius: "3px",
           borderColor: "grey",
-          borderStyle: borderType,
+          borderStyle: borderType || "solid",
           borderWidth: borderWidth,
           ...style,
         }}
         type="text"
         name={name}
         id={id || name}
+        defaultValue={defaultValue}
         placeholder={placeholder}
         onBlur={onBlur}
       />
