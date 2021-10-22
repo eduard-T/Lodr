@@ -1,10 +1,10 @@
 import React from "react";
 
 const TextInput = ({
-  onBlur,
+  onChange,
   placeholder,
   name,
-  defaultValue,
+  value,
   id,
   width,
   borderWidth,
@@ -31,9 +31,9 @@ const TextInput = ({
         type="text"
         name={name}
         id={id || name}
-        defaultValue={defaultValue}
+        value={value}
         placeholder={placeholder}
-        onBlur={onBlur}
+        onChange={onChange}
       />
     </div>
   );

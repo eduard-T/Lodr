@@ -62,7 +62,7 @@ const SingleDriver = ({ driver }) => {
         target,
       });
     } catch (error) {
-      console.log(error);
+      console.log(`Move Driver Order Error:`, error);
     }
   };
 

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 
 //components
 import Button from "../StyledComponents/Button";
@@ -8,10 +9,16 @@ import SingleDriver from "./SingleDriver";
 
 const DriversComponent = ({ data, updateDrivers }) => {
   const [editing, setEditing] = useState(false);
-  const [input, setInput] = useState({});
+  const [input, setInput] = useState({
+    firstName: "",
+    lastName: "",
+    licenseType: "",
+    loads: [],
+  });
+  let driverID = uuidv4();
 
   const updateInput = (key, value) => {
-    let tempInput = { ...input };
+    let tempInput = { driverID, ...input };
 
     tempInput[key] = value;
     setInput(tempInput);
@@ -24,12 +31,18 @@ const DriversComponent = ({ data, updateDrivers }) => {
           input,
         });
       } catch (error) {
-        console.log(error);
+        console.log(`Add Driver Error:`, error);
       }
 
       let currentDrivers = [...data];
       currentDrivers.push(input);
       updateDrivers(currentDrivers);
+      setInput({
+        firstName: "",
+        lastName: "",
+        licenseType: "",
+        loads: [],
+      });
       setEditing(false);
     }
   };
@@ -56,7 +69,7 @@ const DriversComponent = ({ data, updateDrivers }) => {
       </header>
       {editing && (
         <div className="drivers__input">
-          <DriverInput updateInput={updateInput} />
+          <DriverInput updateInput={updateInput} input={input} />
         </div>
       )}
       <div className="drivers__layout">

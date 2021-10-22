@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 
 //components
 import Card from "../StyledComponents/Card";
@@ -8,10 +9,15 @@ import OrderInput from "./OrderInput";
 import SingleOrder from "./SingleOrder";
 
 const OrdersComponent = ({ data, updateOrders }) => {
-  const [input, setInput] = useState({});
+  const [input, setInput] = useState({
+    description: "",
+    cost: "",
+    revenue: "",
+  });
+  let id = uuidv4();
 
   const updateInput = (key, value) => {
-    let tempInput = { ...input };
+    let tempInput = { id, ...input };
     tempInput[key] = value;
     setInput(tempInput);
   };
@@ -23,10 +29,15 @@ const OrdersComponent = ({ data, updateOrders }) => {
           input,
         });
       } catch (error) {
-        console.log(error);
+        console.log(`Create Order Error:`, error);
       }
 
       mutate("add", input);
+      setInput({
+        description: "",
+        cost: "",
+        revenue: "",
+      });
     }
   };
 
@@ -77,7 +88,7 @@ const OrdersComponent = ({ data, updateOrders }) => {
         target,
       });
     } catch (error) {
-      console.log(error);
+      console.log(`Move Order Error:`, error);
     }
   };
 
@@ -92,7 +103,7 @@ const OrdersComponent = ({ data, updateOrders }) => {
       onDrop={(event) => handleOnDrop(event, data)}
     >
       <div className="orders__input">
-        <OrderInput updateInput={updateInput} />
+        <OrderInput updateInput={updateInput} input={input} />
       </div>
       <div className="orders__input--button">
         <Button title="Create Order" onClick={createOrder} />

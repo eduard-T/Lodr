@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 //components
@@ -8,6 +8,12 @@ import IconButton from "../StyledComponents/IconButton";
 const SingleOrder = ({ order, handleDragStart, mutate, driver }) => {
   const [editing, setEditing] = useState(false);
   const [input, setInput] = useState({});
+
+  useEffect(() => {
+    if (order) {
+      setInput(order);
+    }
+  }, [order]);
 
   const updateInput = (key, value) => {
     let tempInput = { ...input };
@@ -24,7 +30,7 @@ const SingleOrder = ({ order, handleDragStart, mutate, driver }) => {
           input,
         });
       } catch (error) {
-        console.log(`error`, error);
+        console.log(`Update Order Error:`, error);
       }
 
       setEditing(false);
@@ -42,7 +48,7 @@ const SingleOrder = ({ order, handleDragStart, mutate, driver }) => {
         },
       });
     } catch (error) {
-      console.log(`error`, error);
+      console.log(`Remove Order Error:`, error);
     }
 
     mutate("remove", order);
@@ -52,9 +58,7 @@ const SingleOrder = ({ order, handleDragStart, mutate, driver }) => {
     <div
       className="singleOrder"
       draggable={editing ? false : true}
-      onDragStart={(event) =>
-        handleDragStart(event, order, driver ? driver : "orders")
-      }
+      onDragStart={(event) => handleDragStart(event, order, driver)}
       onMouseDown={(event) => {
         if (!editing) {
           event.target.style.cursor = "grabbing";
@@ -71,7 +75,7 @@ const SingleOrder = ({ order, handleDragStart, mutate, driver }) => {
     >
       {editing ? (
         <div className="singleOrder__content">
-          <OrderInput updateInput={updateInput} order={order} />
+          <OrderInput updateInput={updateInput} input={input} />
           <IconButton
             source="/save-icon.png"
             alt="Save icon"
@@ -89,10 +93,10 @@ const SingleOrder = ({ order, handleDragStart, mutate, driver }) => {
           />
 
           <p className="singleOrder__content--text description">
-            {order.description}
+            {input.description}
           </p>
-          <p className="singleOrder__content--text cost">${order.cost}</p>
-          <p className="singleOrder__content--text revenue">${order.revenue}</p>
+          <p className="singleOrder__content--text cost">${input.cost}</p>
+          <p className="singleOrder__content--text revenue">${input.revenue}</p>
 
           {!driver && !editing ? (
             <IconButton

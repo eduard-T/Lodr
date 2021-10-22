@@ -19,8 +19,6 @@ api.post("/api/orders/new-order", cors(), async (request, response) => {
   let { input } = request.body;
   orders.push(input);
   response.status(200).end();
-
-  //need to generate an id here
 });
 
 api.put("/api/orders/update-order", cors(), (request, response) => {
@@ -28,13 +26,7 @@ api.put("/api/orders/update-order", cors(), (request, response) => {
 
   let matchedOrder = orders.find((item) => item.id === order.id);
 
-  console.log(`BEFORE`, matchedOrder);
-
   matchedOrder = { ...matchedOrder, ...input };
-
-  console.log(`AFTER`, matchedOrder);
-
-  console.log(`orders`, orders);
 
   let index = orders
     .map((order) => {
@@ -43,6 +35,7 @@ api.put("/api/orders/update-order", cors(), (request, response) => {
     .indexOf(matchedOrder.id);
 
   orders.splice(index, 1);
+  orders.push(matchedOrder);
   response.status(200).end();
 });
 

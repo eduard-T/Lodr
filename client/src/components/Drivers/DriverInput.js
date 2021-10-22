@@ -3,29 +3,32 @@ import React from "react";
 //components
 import TextInput from "../StyledComponents/TextInput";
 
-const DriverInput = ({ updateInput }) => {
+const DriverInput = ({ updateInput, input }) => {
   return (
     <>
       <TextInput
-        name="driverID"
-        placeholder="Driver ID"
-        borderType="none"
-        width={"30%"}
-        onBlur={(event) => updateInput(event.target.id, event.target.value)}
-      />
-      <TextInput
         name="firstName"
         placeholder="First Name"
+        value={input.firstName}
         borderType="none"
         width={"35%"}
-        onBlur={(event) => updateInput(event.target.id, event.target.value)}
+        onChange={(event) => updateInput(event.target.id, event.target.value)}
       />
       <TextInput
         name="lastName"
         placeholder="Last Name"
+        value={input.lastName}
         borderType="none"
         width={"35%"}
-        onBlur={(event) => updateInput(event.target.id, event.target.value)}
+        onChange={(event) => updateInput(event.target.id, event.target.value)}
+      />
+      <TextInput
+        name="licenseType"
+        placeholder="License Type"
+        value={input.licenseType}
+        borderType="none"
+        width={"30%"}
+        onChange={(event) => updateInput(event.target.id, event.target.value)}
       />
     </>
   );
