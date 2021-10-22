@@ -11,7 +11,7 @@ const DriverInput = ({ updateInput, input }) => {
         placeholder="First Name"
         value={input.firstName}
         borderType="none"
-        width={"35%"}
+        width={"50%"}
         onChange={(event) => updateInput(event.target.id, event.target.value)}
       />
       <TextInput
@@ -19,15 +19,7 @@ const DriverInput = ({ updateInput, input }) => {
         placeholder="Last Name"
         value={input.lastName}
         borderType="none"
-        width={"35%"}
-        onChange={(event) => updateInput(event.target.id, event.target.value)}
-      />
-      <TextInput
-        name="licenseType"
-        placeholder="License Type"
-        value={input.licenseType}
-        borderType="none"
-        width={"30%"}
+        width={"50%"}
         onChange={(event) => updateInput(event.target.id, event.target.value)}
       />
     </>

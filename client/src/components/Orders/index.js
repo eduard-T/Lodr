@@ -9,21 +9,46 @@ import OrderInput from "./OrderInput";
 import SingleOrder from "./SingleOrder";
 
 const OrdersComponent = ({ data, updateOrders }) => {
+  // initialize state
   const [input, setInput] = useState({
     description: "",
     cost: "",
     revenue: "",
   });
+  const [errorMsg, setErrorMsg] = useState("");
+
+  // assign a random ID to the id variable
   let id = uuidv4();
 
+  // dynamically add key value pairs to the input object
   const updateInput = (key, value) => {
+    //include the generated id
     let tempInput = { id, ...input };
     tempInput[key] = value;
     setInput(tempInput);
   };
 
+  // verify the supplied values and return a boolean
+  const verify = () => {
+    if (!input.description && !input.cost && !input.revenue) {
+      setErrorMsg("Please fill in all fields!");
+      return false;
+    }
+    if (
+      !input.cost.match(/^\d+(\.\d{2})$/) ||
+      !input.revenue.match(/^\d+(\.\d{2})$/)
+    ) {
+      setErrorMsg("Cost and revenue must be proper values!");
+      return false;
+    }
+    setErrorMsg("");
+    return true;
+  };
+
+  // create an order and update the orders array
   const createOrder = async () => {
-    if (input) {
+    if (verify()) {
+      // if all values are verified, send POST request
       try {
         await axios.post("/api/orders/new-order", {
           input,
@@ -32,6 +57,7 @@ const OrdersComponent = ({ data, updateOrders }) => {
         console.log(`Create Order Error:`, error);
       }
 
+      // update states
       mutate("add", input);
       setInput({
         description: "",
@@ -64,23 +90,31 @@ const OrdersComponent = ({ data, updateOrders }) => {
     }
   };
 
+  // handler for drag start event
   const handleDragStart = (event, obj, current) => {
+    // send data of the grabbed object and location
     event.dataTransfer.setData("order", JSON.stringify(obj));
     event.dataTransfer.setData("current", JSON.stringify(current));
 
+    // remove the order object once grabbed
     mutate("remove", obj);
   };
 
+  // handler for drag over event
   const handleDragOver = (event) => {
     event.preventDefault();
   };
 
+  // handler for drop event
   const handleOnDrop = async (event, target) => {
+    // receive data from the grabbed object on start
     let order = JSON.parse(event.dataTransfer.getData("order"));
     let current = JSON.parse(event.dataTransfer.getData("current"));
 
+    // add the order to the target on drop
     mutate("add", order);
 
+    // send PUT request to update the database
     try {
       await axios.put("/api/orders/move", {
         order,
@@ -102,6 +136,7 @@ const OrdersComponent = ({ data, updateOrders }) => {
       onDragOver={(event) => handleDragOver(event)}
       onDrop={(event) => handleOnDrop(event, data)}
     >
+      {!!errorMsg && <p className="error">{errorMsg}</p>}
       <div className="orders__input">
         <OrderInput updateInput={updateInput} input={input} />
       </div>

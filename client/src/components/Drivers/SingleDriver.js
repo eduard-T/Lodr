@@ -6,9 +6,13 @@ import Card from "../StyledComponents/Card";
 import SingleOrder from "../Orders/SingleOrder";
 
 const SingleDriver = ({ driver }) => {
+  // initialize states
   const [loads, setLoads] = useState();
+
+  // concat the first and last names, assign it to the name variable
   const name = `${driver.firstName} ${driver.lastName}`;
 
+  // on load, set state if data exists
   useEffect(() => {
     if (driver && !!driver.loads) {
       setLoads(driver.loads);
@@ -38,23 +42,31 @@ const SingleDriver = ({ driver }) => {
     }
   };
 
+  // handler for drag start event
   const handleDragStart = (event, obj, current) => {
+    // send data of the grabbed object and location
     event.dataTransfer.setData("order", JSON.stringify(obj));
     event.dataTransfer.setData("current", JSON.stringify(current));
 
+    // remove the order object once grabbed
     mutate("remove", obj);
   };
 
+  // handler for drag over event
   const handleDragOver = (event) => {
     event.preventDefault();
   };
 
+  // handler for drop event
   const handleOnDrop = async (event, target) => {
+    // receive data from the grabbed object on start
     let order = JSON.parse(event.dataTransfer.getData("order"));
     let current = JSON.parse(event.dataTransfer.getData("current"));
 
+    // add the order to the target on drop
     mutate("add", order);
 
+    // send PUT request to update the database
     try {
       await axios.put("/api/orders/move", {
         order,

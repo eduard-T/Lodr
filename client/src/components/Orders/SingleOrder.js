@@ -6,15 +6,18 @@ import OrderInput from "./OrderInput";
 import IconButton from "../StyledComponents/IconButton";
 
 const SingleOrder = ({ order, handleDragStart, mutate, driver }) => {
+  //initialize states
   const [editing, setEditing] = useState(false);
   const [input, setInput] = useState({});
 
+  // on load, set state if data exists
   useEffect(() => {
     if (order) {
       setInput(order);
     }
   }, [order]);
 
+  // dynamically add key value pairs to the input object
   const updateInput = (key, value) => {
     let tempInput = { ...input };
 
@@ -22,8 +25,10 @@ const SingleOrder = ({ order, handleDragStart, mutate, driver }) => {
     setInput(tempInput);
   };
 
+  // update an order in the orders array
   const updateOrder = async () => {
     if (input) {
+      // if the input exists, send a PUT request
       try {
         await axios.put("/api/orders/update-order", {
           order,
@@ -37,6 +42,7 @@ const SingleOrder = ({ order, handleDragStart, mutate, driver }) => {
     }
   };
 
+  // remove an order in the targeted driver's loads array
   const removeOrder = async () => {
     let target = driver;
 
@@ -51,6 +57,7 @@ const SingleOrder = ({ order, handleDragStart, mutate, driver }) => {
       console.log(`Remove Order Error:`, error);
     }
 
+    // remove the order from the driver's loads
     mutate("remove", order);
   };
 
