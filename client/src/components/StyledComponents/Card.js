@@ -36,6 +36,7 @@ const Card = ({
           fontSize: titleSize || 16,
           fontWeight: titleWeight || "400",
           color: titleColor || "black",
+          textTransform: "capitalize",
         }}
       >
         {title}

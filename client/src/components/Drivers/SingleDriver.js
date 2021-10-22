@@ -1,28 +1,69 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 //components
 import Card from "../StyledComponents/Card";
 import SingleOrder from "../Orders/SingleOrder";
 
 const SingleDriver = ({ driver }) => {
-  const name = `${driver.first_name} ${driver.last_name}`;
+  const [loads, setLoads] = useState();
+  const name = `${driver.firstName} ${driver.lastName}`;
+
+  useEffect(() => {
+    if (driver && !!driver.loads) {
+      setLoads(driver.loads);
+    }
+  }, [driver]);
+
+  //function to mutate the data based on the action
+  const mutate = (action, value) => {
+    let currentLoads = [...loads];
+
+    if (action === "add") {
+      currentLoads.push(value);
+      setLoads(currentLoads);
+    }
+
+    if (action === "remove") {
+      let index = currentLoads
+        .map((load) => {
+          return load.id;
+        })
+        .indexOf(value.id);
+
+      setTimeout(() => {
+        currentLoads.splice(index, 1);
+        setLoads(currentLoads);
+      }, 1); // Added a timeout of 1ms to offset last item from disappearing on drag start
+    }
+  };
 
   const handleDragStart = (event, obj, current) => {
-    console.log(obj);
-    event.dataTransfer.setData("load", JSON.stringify(obj));
-    console.log(current);
-    //create logic to splice the load from the current array and add it to the dropped array
+    event.dataTransfer.setData("order", JSON.stringify(obj));
+    event.dataTransfer.setData("current", JSON.stringify(current));
+
+    mutate("remove", obj);
   };
 
   const handleDragOver = (event) => {
     event.preventDefault();
   };
 
-  const handleOnDrop = (event, target) => {
-    let load = JSON.parse(event.dataTransfer.getData("load"));
-    console.log(load);
-    console.log(target);
-    target.loads.push(load);
+  const handleOnDrop = async (event, target) => {
+    let order = JSON.parse(event.dataTransfer.getData("order"));
+    let current = JSON.parse(event.dataTransfer.getData("current"));
+
+    mutate("add", order);
+
+    try {
+      await axios.put("/api/orders/move", {
+        order,
+        current,
+        target,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -35,20 +76,20 @@ const SingleDriver = ({ driver }) => {
       onDrop={(event) => handleOnDrop(event, driver)}
     >
       <div className="singleDriver">
-        {driver && driver.loads && driver.loads.length ? (
-          driver.loads.map((load, index) => {
+        {loads && !!loads.length ? (
+          loads.map((order, index) => {
             return (
               <SingleOrder
                 key={index}
-                load={load}
+                order={order}
                 handleDragStart={handleDragStart}
-                currentTarget={driver}
-                assigned={true}
+                mutate={mutate}
+                driver={driver}
               />
             );
           })
         ) : (
-          <p className="singleDriver--empty">No Loads</p>
+          <p className="singleDriver--empty">No Orders</p>
         )}
       </div>
     </Card>

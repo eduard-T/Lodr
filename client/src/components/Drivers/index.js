@@ -1,12 +1,12 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 //components
 import Button from "../StyledComponents/Button";
 import DriverInput from "./DriverInput";
 import SingleDriver from "./SingleDriver";
-import * as Data from "../MOCK_DATA.json";
 
-const DriversComponent = () => {
+const DriversComponent = ({ data, updateDrivers }) => {
   const [editing, setEditing] = useState(false);
   const [input, setInput] = useState({});
 
@@ -17,13 +17,25 @@ const DriversComponent = () => {
     setInput(tempInput);
   };
 
-  const addDriver = () => {
-    console.log(input);
-    setEditing(false);
+  const addDriver = async () => {
+    if (input) {
+      try {
+        await axios.post("/api/drivers/new-driver", {
+          input,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+
+      let currentDrivers = [...data];
+      currentDrivers.push(input);
+      updateDrivers(currentDrivers);
+      setEditing(false);
+    }
   };
 
   return (
-    <main className="drivers">
+    <section className="drivers">
       <header className="drivers__header">
         <p className="drivers__header--title">
           Drivers <span className="drivers__header--accent">//</span>
@@ -48,13 +60,13 @@ const DriversComponent = () => {
         </div>
       )}
       <div className="drivers__layout">
-        {Data &&
-          Data.default &&
-          Data.default.map((driver) => {
-            return <SingleDriver driver={driver} key={driver.id} />;
+        {data &&
+          !!data.length &&
+          data.map((driver) => {
+            return <SingleDriver driver={driver} key={driver.driverID} />;
           })}
       </div>
-    </main>
+    </section>
   );
 };
 

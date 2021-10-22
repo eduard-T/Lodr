@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./styles.css";
 
 //components
@@ -6,15 +7,25 @@ import OrdersComponent from "./components/Orders";
 import DriversComponent from "./components/Drivers";
 
 const App = () => {
-  const [data, setData] = useState(null);
+  const [orders, setOrders] = useState();
+  const [drivers, setDrivers] = useState();
 
   useEffect(() => {
-    fetch("/api")
-      .then((res) => res.json())
-      .then((data) => setData(data.message));
+    axios.get("/api").then((response) => {
+      if (response && response.data) {
+        setOrders(response.data.orders);
+        setDrivers(response.data.drivers);
+      }
+    });
   }, []);
 
-  console.log(`data`, data);
+  const updateOrders = (value) => {
+    setOrders(value);
+  };
+
+  const updateDrivers = (value) => {
+    setDrivers(value);
+  };
 
   return (
     <div className="App">
@@ -22,8 +33,8 @@ const App = () => {
         <h1 className="header__title">Driver Manager</h1>
       </header>
       <main className="wrapper">
-        <OrdersComponent />
-        <DriversComponent />
+        <OrdersComponent data={orders} updateOrders={updateOrders} />
+        <DriversComponent data={drivers} updateDrivers={updateDrivers} />
       </main>
     </div>
   );

@@ -7,6 +7,13 @@ const DriverInput = ({ updateInput }) => {
   return (
     <>
       <TextInput
+        name="driverID"
+        placeholder="Driver ID"
+        borderType="none"
+        width={"30%"}
+        onBlur={(event) => updateInput(event.target.id, event.target.value)}
+      />
+      <TextInput
         name="firstName"
         placeholder="First Name"
         borderType="none"
@@ -18,13 +25,6 @@ const DriverInput = ({ updateInput }) => {
         placeholder="Last Name"
         borderType="none"
         width={"35%"}
-        onBlur={(event) => updateInput(event.target.id, event.target.value)}
-      />
-      <TextInput
-        name="licenseType"
-        placeholder="License Type"
-        borderType="none"
-        width={"30%"}
         onBlur={(event) => updateInput(event.target.id, event.target.value)}
       />
     </>

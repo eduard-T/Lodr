@@ -356,6 +356,7 @@ button:focus {
   display: flex;
   flex: 1;
   position: relative;
+  align-items: center;
 }
 
 .singleOrder__dragIcon {
@@ -372,7 +373,7 @@ button:focus {
   width: 30%;
 }
 
-.singleOrder__content--text.route {
+.singleOrder__content--text.description {
   word-break: break-word;
   padding-right: 5px;
   width: 40%;
