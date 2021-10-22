@@ -248,6 +248,8 @@ dd {
 html {
   font-size: 62.5%;
   height: 100%;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
 }
 
 body {
@@ -359,6 +361,10 @@ button:focus {
   display: flex;
   justify-content: space-between;
   cursor: grab;
+}
+
+.singleOrder:active {
+  cursor: grabbing;
 }
 
 .singleOrder__content {

@@ -29,14 +29,14 @@ const OrdersComponent = ({ data, updateOrders }) => {
   };
 
   // verify the supplied values and return a boolean
-  const verify = () => {
-    if (!input.description && !input.cost && !input.revenue) {
+  const verify = (value) => {
+    if (!value.description && !value.cost && !value.revenue) {
       setErrorMsg("Please fill in all fields!");
       return false;
     }
     if (
-      !input.cost.match(/^\d+(\.\d{2})$/) ||
-      !input.revenue.match(/^\d+(\.\d{2})$/)
+      !value.cost.match(/^\d+(\.\d{2})$/) ||
+      !value.revenue.match(/^\d+(\.\d{2})$/)
     ) {
       setErrorMsg("Cost and revenue must be proper values!");
       return false;
@@ -47,7 +47,7 @@ const OrdersComponent = ({ data, updateOrders }) => {
 
   // create an order and update the orders array
   const createOrder = async () => {
-    if (verify()) {
+    if (verify(input)) {
       // if all values are verified, send POST request
       try {
         await axios.post("/api/orders/new-order", {
@@ -159,6 +159,7 @@ const OrdersComponent = ({ data, updateOrders }) => {
                 key={index}
                 order={order}
                 handleDragStart={handleDragStart}
+                verify={verify}
                 driver={null}
               />
             );

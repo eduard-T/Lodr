@@ -5,7 +5,7 @@ import axios from "axios";
 import OrderInput from "./OrderInput";
 import IconButton from "../StyledComponents/IconButton";
 
-const SingleOrder = ({ order, handleDragStart, mutate, driver }) => {
+const SingleOrder = ({ order, handleDragStart, verify, mutate, driver }) => {
   //initialize states
   const [editing, setEditing] = useState(false);
   const [input, setInput] = useState({});
@@ -27,8 +27,8 @@ const SingleOrder = ({ order, handleDragStart, mutate, driver }) => {
 
   // update an order in the orders array
   const updateOrder = async () => {
-    if (input) {
-      // if the input exists, send a PUT request
+    if (verify(input)) {
+      // if the values are verified, send a PUT request
       try {
         await axios.put("/api/orders/update-order", {
           order,
@@ -61,21 +61,15 @@ const SingleOrder = ({ order, handleDragStart, mutate, driver }) => {
     mutate("remove", order);
   };
 
+  const toggleEdit = () => {
+    setEditing(!editing);
+  };
+
   return (
     <div
       className="singleOrder"
       draggable={editing ? false : true}
       onDragStart={(event) => handleDragStart(event, order, driver)}
-      onMouseDown={(event) => {
-        if (!editing) {
-          event.target.style.cursor = "grabbing";
-        }
-      }}
-      onMouseUp={(event) => {
-        if (!editing) {
-          event.target.style.cursor = "grab";
-        }
-      }}
       style={{
         padding: editing ? 0 : "10px",
       }}
@@ -109,7 +103,7 @@ const SingleOrder = ({ order, handleDragStart, mutate, driver }) => {
             <IconButton
               source="/edit-icon.png"
               alt="Edit icon"
-              onClick={() => setEditing(true)}
+              onClick={toggleEdit}
               right="0"
             />
           ) : (
