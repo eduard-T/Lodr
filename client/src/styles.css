@@ -269,6 +269,14 @@ button:focus {
   margin: 0 auto;
 }
 
+.card {
+  border: 3px dashed transparent;
+}
+
+.card.dragOver {
+  border: 3px dashed limegreen;
+}
+
 .textInput::placeholder {
   font-size: clamp(12px, 2.5vw, 15px);
 }

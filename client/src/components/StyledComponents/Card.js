@@ -13,9 +13,12 @@ const Card = ({
   style,
   onDragOver,
   onDrop,
+  onDragEnter,
+  onDragLeave,
 }) => {
   return (
     <div
+      className="card"
       style={{
         minWidth: minWidth || "auto",
         maxWidth: maxWidth || "auto",
@@ -30,6 +33,8 @@ const Card = ({
       }}
       onDragOver={onDragOver}
       onDrop={onDrop}
+      onDragEnter={onDragEnter}
+      onDragLeave={onDragLeave}
     >
       <p
         style={{

@@ -90,6 +90,8 @@ const OrdersComponent = ({ data, updateOrders }) => {
     }
   };
 
+  // ================== DRAG HANDLERS START ================== //
+
   // handler for drag start event
   const handleDragStart = (event, obj, current) => {
     // send data of the grabbed object and location
@@ -100,13 +102,25 @@ const OrdersComponent = ({ data, updateOrders }) => {
     mutate("remove", obj);
   };
 
+  const handleDragEnter = (event) => {
+    event.preventDefault();
+    event.currentTarget.classList.add("dragOver");
+  };
+
   // handler for drag over event
   const handleDragOver = (event) => {
     event.preventDefault();
+    event.currentTarget.classList.add("dragOver");
+  };
+
+  const handleDragLeave = (event) => {
+    event.currentTarget.classList.remove("dragOver");
   };
 
   // handler for drop event
   const handleOnDrop = async (event, target) => {
+    event.currentTarget.classList.remove("dragOver");
+
     // receive data from the grabbed object on start
     let order = JSON.parse(event.dataTransfer.getData("order"));
     let current = JSON.parse(event.dataTransfer.getData("current"));
@@ -126,6 +140,8 @@ const OrdersComponent = ({ data, updateOrders }) => {
     }
   };
 
+  // ================== DRAG HANDLERS END ================== //
+
   return (
     <Card
       style={{ margin: "50px 0" }}
@@ -135,6 +151,8 @@ const OrdersComponent = ({ data, updateOrders }) => {
       titleWeight="700"
       onDragOver={(event) => handleDragOver(event)}
       onDrop={(event) => handleOnDrop(event, data)}
+      onDragEnter={(event) => handleDragEnter(event)}
+      onDragLeave={(event) => handleDragLeave(event)}
     >
       {!!errorMsg && <p className="error">{errorMsg}</p>}
       <div className="orders__input">

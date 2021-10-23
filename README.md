@@ -83,7 +83,7 @@ You're ready to use the app! :alien:
 
 ## Known Issues
 
-- Order is lost if it is not dropped in an appropriate location i.e. unassigned orders or driver card
+- Order is lost if it is dropped outside of unassigned orders or a driver card
 
 ## Contact
 

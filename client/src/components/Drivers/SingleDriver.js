@@ -42,6 +42,8 @@ const SingleDriver = ({ driver }) => {
     }
   };
 
+  // ================== DRAG HANDLERS START ================== //
+
   // handler for drag start event
   const handleDragStart = (event, obj, current) => {
     // send data of the grabbed object and location
@@ -52,13 +54,25 @@ const SingleDriver = ({ driver }) => {
     mutate("remove", obj);
   };
 
+  const handleDragEnter = (event) => {
+    event.preventDefault();
+    event.currentTarget.classList.add("dragOver");
+  };
+
   // handler for drag over event
   const handleDragOver = (event) => {
     event.preventDefault();
+    event.currentTarget.classList.add("dragOver");
+  };
+
+  const handleDragLeave = (event) => {
+    event.currentTarget.classList.remove("dragOver");
   };
 
   // handler for drop event
   const handleOnDrop = async (event, target) => {
+    event.currentTarget.classList.remove("dragOver");
+
     // receive data from the grabbed object on start
     let order = JSON.parse(event.dataTransfer.getData("order"));
     let current = JSON.parse(event.dataTransfer.getData("current"));
@@ -78,6 +92,8 @@ const SingleDriver = ({ driver }) => {
     }
   };
 
+  // ================== DRAG HANDLERS END ================== //
+
   return (
     <Card
       title={name}
@@ -86,6 +102,8 @@ const SingleDriver = ({ driver }) => {
       titleWeight="500"
       onDragOver={(event) => handleDragOver(event)}
       onDrop={(event) => handleOnDrop(event, driver)}
+      onDragEnter={(event) => handleDragEnter(event)}
+      onDragLeave={(event) => handleDragLeave(event)}
     >
       <div className="singleDriver">
         {loads && !!loads.length ? (
