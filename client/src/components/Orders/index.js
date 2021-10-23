@@ -30,13 +30,14 @@ const OrdersComponent = ({ data, updateOrders }) => {
 
   // verify the supplied values and return a boolean
   const verify = (value) => {
+    console.log(`value`, value);
     if (!value.description && !value.cost && !value.revenue) {
       setErrorMsg("Please fill in all fields!");
       return false;
     }
     if (
-      !value.cost.match(/^\d+(\.\d{2})$/) ||
-      !value.revenue.match(/^\d+(\.\d{2})$/)
+      !value.cost.toString().match(/^\d+(\.\d{2})$/) ||
+      !value.revenue.toString().match(/^\d+(\.\d{2})$/)
     ) {
       setErrorMsg("Cost and revenue must be proper values!");
       return false;
@@ -48,17 +49,24 @@ const OrdersComponent = ({ data, updateOrders }) => {
   // create an order and update the orders array
   const createOrder = async () => {
     if (verify(input)) {
+      // create a new object to change the cost a revenue values into number values
+      let order = {
+        ...input,
+        cost: parseFloat(input.cost),
+        revenue: parseFloat(input.revenue),
+      };
+
       // if all values are verified, send POST request
       try {
         await axios.post("/api/orders/new-order", {
-          input,
+          order,
         });
       } catch (error) {
         console.log(`Create Order Error:`, error);
       }
 
       // update states
-      mutate("add", input);
+      mutate("add", order);
       setInput({
         description: "",
         cost: "",

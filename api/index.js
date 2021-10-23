@@ -18,9 +18,9 @@ api.get("/api", cors(), async (request, response) => {
 
 // === ADD A NEW ORDER
 api.post("/api/orders/new-order", cors(), async (request, response) => {
-  let { input } = request.body;
+  let { order } = request.body;
   // push the object into the orders array
-  orders.push(input);
+  orders.push(order);
   response.status(200).end();
 });
 
