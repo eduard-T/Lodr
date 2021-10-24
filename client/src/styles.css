@@ -270,11 +270,11 @@ button:focus {
 }
 
 .card {
-  border: 3px dashed transparent;
+  border: 3px solid transparent;
 }
 
 .card.dragOver {
-  border: 3px dashed limegreen;
+  border: 3px solid royalblue;
 }
 
 .textInput::placeholder {
