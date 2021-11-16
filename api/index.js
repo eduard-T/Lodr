@@ -22,7 +22,8 @@ api.get("/api/orders", cors(), async (request, response) => {
     const allOrders = await pool.query("SELECT * FROM orders");
     response.status(200).json(allOrders.rows);
   } catch (error) {
-    response.status(400).send("Order query error:", error.message).end();
+    console.log("ERROR!", error);
+    response.status(500).send("Failed to retrieve orders");
   }
 });
 
@@ -34,7 +35,8 @@ api.get("/api/drivers", cors(), async (request, response) => {
     );
     response.status(200).json(allDrivers.rows);
   } catch (error) {
-    response.status(400).send("Driver query error:", error.message).end();
+    console.log("ERROR!", error);
+    response.status(500).send("Failed to retrieve drivers");
   }
 });
 
@@ -50,10 +52,8 @@ api.post("/api/orders/new-order", cors(), async (request, response) => {
     );
     response.status(200).json(newOrder.rows[0]).end();
   } catch (error) {
-    response
-      .status(400)
-      .send("Error! Could not create order:", error.message)
-      .end();
+    console.log("ERROR!", error);
+    response.status(500).send("Failed to create order");
   }
 });
 
@@ -68,12 +68,10 @@ api.put("/api/orders/update-order", cors(), async (request, response) => {
       [order.order_id, input.description, input.cost, input.revenue]
     );
 
-    response.status(200).end();
+    response.status(200);
   } catch (error) {
-    response
-      .status(400)
-      .send("Error! Could not update order:", error.message)
-      .end();
+    console.log("ERROR!", error);
+    response.status(500).send("Failed to update order");
   }
 });
 
@@ -87,12 +85,10 @@ api.post("/api/drivers/new-driver", cors(), async (request, response) => {
       "INSERT INTO drivers(driver_id, first_name, last_name) VALUES ($1, $2, $3) RETURNING *",
       [input.driver_id, input.first_name, input.last_name]
     );
-    response.status(200).end();
+    response.status(200);
   } catch (error) {
-    response
-      .status(400)
-      .send("Error! Could not create driver:", error.message)
-      .end();
+    console.log("ERROR!", error);
+    response.status(500).send("Failed to create driver");
   }
 });
 
@@ -128,12 +124,10 @@ api.put("/api/orders/move", cors(), async (request, response) => {
       );
     }
 
-    response.status(200).end();
+    response.status(200);
   } catch (error) {
-    response
-      .status(400)
-      .send("Error! Could not move order:", error.message)
-      .end();
+    console.log("ERROR!", error);
+    response.status(500).send("Failed to move order");
   }
 });
 
@@ -150,10 +144,8 @@ api.delete("/api/orders/remove-order", cors(), async (request, response) => {
 
     response.status(200).end();
   } catch (error) {
-    response
-      .status(400)
-      .send("Error! Could not delete order:", error.message)
-      .end();
+    console.log("ERROR!", error);
+    response.status(500).send("Failed to delete order");
   }
 });
 
