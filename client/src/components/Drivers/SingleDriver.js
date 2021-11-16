@@ -7,10 +7,10 @@ import SingleOrder from "../Orders/SingleOrder";
 
 const SingleDriver = ({ driver }) => {
   // initialize states
-  const [loads, setLoads] = useState();
+  const [loads, setLoads] = useState([]);
 
   // concat the first and last names, assign it to the name variable
-  const name = `${driver.firstName} ${driver.lastName}`;
+  const name = `${driver.first_name} ${driver.last_name}`;
 
   // on load, set state if data exists
   useEffect(() => {

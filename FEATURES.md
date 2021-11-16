@@ -8,7 +8,7 @@
 
 2. Ability to create new drivers and orders
 
-- There are two input fields. One creates a new driver with a first and last name, as well as a generated uuid. The other field creates an order with a uuid and fields for the description, cost, and revenue. Either input creates an object and pushes it to the respective database.
+- There are two input fields. One creates a new driver with a first and last name, as well as a generated uuid. The other field creates an order with a uuid and fields for the description, cost, and revenue. Either input creates an object and adds it to the respective database.
 
 3. Ability to delete orders
 

@@ -18,19 +18,18 @@ const OrdersComponent = ({ data, updateOrders }) => {
   const [errorMsg, setErrorMsg] = useState("");
 
   // assign a random ID to the id variable
-  let id = uuidv4();
+  let order_id = uuidv4();
 
   // dynamically add key value pairs to the input object
   const updateInput = (key, value) => {
     //include the generated id
-    let tempInput = { id, ...input };
+    let tempInput = { order_id, ...input };
     tempInput[key] = value;
     setInput(tempInput);
   };
 
   // verify the supplied values and return a boolean
   const verify = (value) => {
-    console.log(`value`, value);
     if (!value.description && !value.cost && !value.revenue) {
       setErrorMsg("Please fill in all fields!");
       return false;
@@ -179,10 +178,10 @@ const OrdersComponent = ({ data, updateOrders }) => {
 
         {data &&
           !!data.length &&
-          data.map((order, index) => {
+          data.map((order) => {
             return (
               <SingleOrder
-                key={index}
+                key={order.order_id}
                 order={order}
                 handleDragStart={handleDragStart}
                 verify={verify}

@@ -7,17 +7,17 @@ const DriverInput = ({ updateInput, input }) => {
   return (
     <>
       <TextInput
-        name="firstName"
+        name="first_name"
         placeholder="First Name"
-        value={input.firstName}
+        value={input.first_name}
         borderType="none"
         width={"50%"}
         onChange={(event) => updateInput(event.target.id, event.target.value)}
       />
       <TextInput
-        name="lastName"
+        name="last_name"
         placeholder="Last Name"
-        value={input.lastName}
+        value={input.last_name}
         borderType="none"
         width={"50%"}
         onChange={(event) => updateInput(event.target.id, event.target.value)}

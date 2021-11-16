@@ -11,19 +11,19 @@ const DriversComponent = ({ data, updateDrivers }) => {
   // initialize states
   const [editing, setEditing] = useState(false);
   const [input, setInput] = useState({
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     loads: [],
   });
   const [errorMsg, setErrorMsg] = useState("");
 
   // assign a random ID to the driverID variable
-  let driverID = uuidv4();
+  let driver_id = uuidv4();
 
   // dynamically add key value pairs to the input object
   const updateInput = (key, value) => {
     // include the generated driverID
-    let tempInput = { driverID, ...input };
+    let tempInput = { driver_id, ...input };
 
     tempInput[key] = value;
     setInput(tempInput);
@@ -32,8 +32,8 @@ const DriversComponent = ({ data, updateDrivers }) => {
   // reset input object and stop editing
   const clearInput = () => {
     setInput({
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       loads: [],
     });
     setErrorMsg("");
@@ -42,13 +42,13 @@ const DriversComponent = ({ data, updateDrivers }) => {
 
   // verify the supplied values and return a boolean
   const verify = () => {
-    if (!input.firstName && !input.lastName) {
+    if (!input.first_name && !input.last_name) {
       setErrorMsg("Please fill in all fields!");
       return false;
     }
     if (
-      !input.firstName.match(/^[a-zA-Z ]{2,30}$/) ||
-      !input.lastName.match(/^[a-zA-Z ]{2,30}$/)
+      !input.first_name.match(/^[a-zA-Z ]{2,30}$/) ||
+      !input.last_name.match(/^[a-zA-Z ]{2,30}$/)
     ) {
       setErrorMsg("Please enter a valid name!");
       return false;
@@ -105,7 +105,7 @@ const DriversComponent = ({ data, updateDrivers }) => {
         {data &&
           !!data.length &&
           data.map((driver) => {
-            return <SingleDriver driver={driver} key={driver.driverID} />;
+            return <SingleDriver driver={driver} key={driver.driver_id} />;
           })}
       </div>
     </section>

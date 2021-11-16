@@ -11,10 +11,15 @@ const App = () => {
   const [drivers, setDrivers] = useState();
 
   useEffect(() => {
-    axios.get("/api").then((response) => {
+    axios.get("/api/orders").then((response) => {
       if (response && response.data) {
-        setOrders(response.data.orders);
-        setDrivers(response.data.drivers);
+        setOrders(response.data);
+      }
+    });
+
+    axios.get("/api/drivers").then((response) => {
+      if (response && response.data) {
+        setDrivers(response.data);
       }
     });
   }, []);

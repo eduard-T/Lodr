@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { orders, drivers } = require("./database");
+const pool = require("./db");
 
 const PORT = process.env.PORT || 3001;
 
@@ -11,49 +11,72 @@ api.use(express.urlencoded({ extended: true }));
 api.use(express.json());
 api.use(cors());
 
-// === SEND ALL DATA FROM ORDERS AND DRIVERS
-api.get("/api", cors(), async (request, response) => {
-  response.status(200).json({ orders, drivers });
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "client/build")));
+}
+
+// === SEND ALL DATA FROM ORDERS
+api.get("/api/orders", cors(), async (request, response) => {
+  try {
+    const allOrders = await pool.query("SELECT * FROM orders");
+    response.status(200).json(allOrders.rows);
+  } catch (error) {
+    response
+      .status(400)
+      .statusMessage("Order query error:", error.message)
+      .end();
+  }
+});
+
+// === SEND ALL DATA FROM DRIVERS
+api.get("/api/drivers", cors(), async (request, response) => {
+  try {
+    const allDrivers = await pool.query(
+      "SELECT * FROM drivers ORDER BY last_name"
+    );
+    response.status(200).json(allDrivers.rows);
+  } catch (error) {
+    response
+      .status(400)
+      .statusMessage("Driver query error:", error.message)
+      .end();
+  }
 });
 
 // === ADD A NEW ORDER
 api.post("/api/orders/new-order", cors(), async (request, response) => {
   let { order } = request.body;
-  // push the object into the orders array
-  orders.push(order);
-  response.status(200).end();
+
+  // insert the object into the orders table
+  const newOrder = await pool.query(
+    "INSERT INTO orders(order_id, description, cost, revenue) VALUES ($1, $2, $3, $4) RETURNING *",
+    [order.order_id, order.description, order.cost, order.revenue]
+  );
+  response.status(200).json(newOrder.rows[0]).end();
 });
 
 // === UPDATE AN ORDER
-api.put("/api/orders/update-order", cors(), (request, response) => {
+api.put("/api/orders/update-order", cors(), async (request, response) => {
   let { order, input } = request.body;
 
-  // find the received order with the order in the orders array
-  let matchedOrder = orders.find((item) => item.id === order.id);
+  //find and update the order by order id
+  await pool.query(
+    "UPDATE orders SET description = $2, cost = $3, revenue = $4  WHERE order_id = $1 RETURNING *",
+    [order.order_id, input.description, input.cost, input.revenue]
+  );
 
-  // spread the input object into the matched order with the existing info
-  matchedOrder = { ...matchedOrder, ...input };
-
-  // find the index of the matched order
-  let index = orders
-    .map((order) => {
-      return order.id;
-    })
-    .indexOf(matchedOrder.id);
-
-  // remove the order from the orders array
-  orders.splice(index, 1);
-
-  // push the updated order into the orders array
-  orders.push(matchedOrder);
   response.status(200).end();
 });
 
 // === ADD A NEW DRIVER
 api.post("/api/drivers/new-driver", cors(), async (request, response) => {
   let { input } = request.body;
-  // push the object into the drivers array
-  drivers.push(input);
+
+  // insert the object into the drivers table
+  const newDriver = await pool.query(
+    "INSERT INTO drivers(driver_id, first_name, last_name) VALUES ($1, $2, $3) RETURNING *",
+    [input.driver_id, input.first_name, input.last_name]
+  );
   response.status(200).end();
 });
 
@@ -61,42 +84,31 @@ api.post("/api/drivers/new-driver", cors(), async (request, response) => {
 api.put("/api/orders/move", cors(), async (request, response) => {
   let { order, current, target } = request.body;
 
-  // function to find the driver based on the location
-  const findDriver = (location) => {
-    let result = drivers.find(
-      (driver) => driver.driverID === location.driverID
-    );
-
-    return result;
-  };
-
-  // function to remove the order based on the location and order ID
-  const removeOrder = (current, value) => {
-    let index = current
-      .map((order) => {
-        return order.id;
-      })
-      .indexOf(value.id);
-
-    current.splice(index, 1);
-  };
-
   // if the order is in a driver object find the driver and remove the order
-  if (current && current.driverID) {
-    let driver = findDriver(current);
-    removeOrder(driver.loads, order);
+  if (current && current.driver_id) {
+    await pool.query(
+      "UPDATE drivers SET loads = array_remove(loads, $2) WHERE driver_id = $1 RETURNING *",
+      [current.driver_id, order]
+    );
   } else {
-    // if not, remove the order from the orders array
-    removeOrder(orders, order);
+    // if not, remove the order from the orders table
+    pool.query("DELETE FROM orders WHERE order_id = $1 RETURNING *", [
+      order.order_id,
+    ]);
   }
 
   // if the target is a driver object find the driver and add the order
-  if (target && target.driverID) {
-    let driver = findDriver(target);
-    driver.loads.push(order);
+  if (target && target.driver_id) {
+    await pool.query(
+      "UPDATE drivers SET loads = loads || $2 WHERE driver_id = $1 RETURNING *",
+      [target.driver_id, [order]]
+    );
   } else {
     // if not, add it to the orders array
-    orders.push(order);
+    pool.query(
+      "INSERT INTO orders(order_id, description, cost, revenue) VALUES ($1, $2, $3, $4) RETURNING *",
+      [order.order_id, order.description, order.cost, order.revenue]
+    );
   }
 
   response.status(200).end();
@@ -106,29 +118,18 @@ api.put("/api/orders/move", cors(), async (request, response) => {
 api.delete("/api/orders/remove-order", cors(), async (request, response) => {
   let { order, target } = request.body;
 
-  // function to find the driver in the drivers array
-  const findDriver = () => {
-    let result = drivers.find((driver) => driver.driverID === target.driverID);
-
-    return result;
-  };
-
-  // function to remove the order from the matched driver's loads
-  const removeOrder = (value) => {
-    let index = target.loads
-      .map((order) => {
-        return order.id;
-      })
-      .indexOf(value.id);
-
-    driver.loads.splice(index, 1);
-  };
-
-  // find the driver, then remove the order from their loads
-  let driver = findDriver();
-  removeOrder(driver.loads, order);
+  //find and remove the requested order from the target driver
+  await pool.query(
+    "UPDATE drivers SET loads = array_remove(loads, $2) WHERE driver_id = $1 RETURNING *",
+    [target.driver_id, order]
+  );
 
   response.status(200).end();
+});
+
+//catch all function to redirect to the homepage if the path does not exist
+app.get("*", cors(), (request, response) => {
+  response.sendFile(path.join(__dirname, "client/build/index.html"));
 });
 
 // listen for API at the given port
