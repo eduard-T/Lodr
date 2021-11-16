@@ -12,7 +12,7 @@ api.use(express.json());
 api.use(cors());
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "client/build")));
+  api.use(express.static(path.join(__dirname, "client/build")));
 }
 
 // === SEND ALL DATA FROM ORDERS
@@ -128,7 +128,7 @@ api.delete("/api/orders/remove-order", cors(), async (request, response) => {
 });
 
 //catch all function to redirect to the homepage if the path does not exist
-app.get("*", cors(), (request, response) => {
+api.get("*", cors(), (request, response) => {
   response.sendFile(path.join(__dirname, "client/build/index.html"));
 });
 
