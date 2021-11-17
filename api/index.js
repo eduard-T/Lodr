@@ -60,15 +60,15 @@ api.post("/api/orders/new-order", cors(), async (request, response) => {
 // === UPDATE AN ORDER
 api.put("/api/orders/update-order", cors(), async (request, response) => {
   try {
-    let { order, input } = request.body;
+    let { input } = request.body;
 
     //find and update the order by order id
-    await pool.query(
-      "UPDATE orders SET description = $2, cost = $3, revenue = $4  WHERE order_id = $1 RETURNING *",
-      [order.order_id, input.description, input.cost, input.revenue]
+    const updateOrder = await pool.query(
+      "UPDATE orders SET description = $1, cost = $2, revenue = $3 WHERE order_id = $4 RETURNING *",
+      [input.description, input.cost, input.revenue, input.order_id]
     );
 
-    response.status(200);
+    response.status(200).json(updateOrder.rows[0]);
   } catch (error) {
     console.log("ERROR!", error);
     response.status(500).send("Failed to update order");
@@ -124,7 +124,7 @@ api.put("/api/orders/move", cors(), async (request, response) => {
       );
     }
 
-    response.status(200);
+    response.status(200).end();
   } catch (error) {
     console.log("ERROR!", error);
     response.status(500).send("Failed to move order");
@@ -136,13 +136,13 @@ api.delete("/api/orders/remove-order", cors(), async (request, response) => {
   try {
     let { order, target } = request.body;
 
-    //find and remove the requested order from the target driver
-    await pool.query(
+    // find and remove the requested order from the target driver
+    const deleteOrder = await pool.query(
       "UPDATE drivers SET loads = array_remove(loads, $2) WHERE driver_id = $1 RETURNING *",
       [target.driver_id, order]
     );
 
-    response.status(200);
+    response.status(200).json(deleteOrder.rows[0]);
   } catch (error) {
     console.log("ERROR!", error);
     response.status(500).send("Failed to delete order");

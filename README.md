@@ -52,7 +52,7 @@ $ npm install
 5. Start the API server
 
 ```
-$ npm start
+$ npm run dev
 ```
 
 6. You should see the following after `npm start`
@@ -83,7 +83,7 @@ You're ready to use the app! :alien:
 
 ## Known Issues
 
-- Order is lost if it is dropped outside of unassigned orders or a driver card, this order is still present in the API, and returns to the card it was pulled from on refresh
+- Order is lost if it is dropped outside of unassigned orders or a driver card, this order is still present in the database, and returns to the card it was pulled from on refresh
 
 ## Contact
 

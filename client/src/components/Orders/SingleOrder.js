@@ -31,7 +31,6 @@ const SingleOrder = ({ order, handleDragStart, verify, mutate, driver }) => {
       // if the values are verified, send a PUT request
       try {
         await axios.put("/api/orders/update-order", {
-          order,
           input,
         });
       } catch (error) {
