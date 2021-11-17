@@ -86,9 +86,9 @@ const OrdersComponent = ({ data, updateOrders }) => {
     if (action === "remove") {
       let index = currentOrders
         .map((load) => {
-          return load.id;
+          return load.order_id;
         })
-        .indexOf(value.id);
+        .indexOf(value.order_id);
 
       setTimeout(() => {
         currentOrders.splice(index, 1);

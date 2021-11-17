@@ -31,9 +31,9 @@ const SingleDriver = ({ driver }) => {
     if (action === "remove") {
       let index = currentLoads
         .map((load) => {
-          return load.id;
+          return load.order_id;
         })
-        .indexOf(value.id);
+        .indexOf(value.order_id);
 
       setTimeout(() => {
         currentLoads.splice(index, 1);

@@ -105,7 +105,7 @@ api.put("/api/orders/move", cors(), async (request, response) => {
       );
     } else {
       // if not, remove the order from the orders table
-      pool.query("DELETE FROM orders WHERE order_id = $1 RETURNING *", [
+      await pool.query("DELETE FROM orders WHERE order_id = $1 RETURNING *", [
         order.order_id,
       ]);
     }
@@ -142,7 +142,7 @@ api.delete("/api/orders/remove-order", cors(), async (request, response) => {
       [target.driver_id, order]
     );
 
-    response.status(200).end();
+    response.status(200);
   } catch (error) {
     console.log("ERROR!", error);
     response.status(500).send("Failed to delete order");
