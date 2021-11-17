@@ -50,7 +50,7 @@ api.post("/api/orders/new-order", cors(), async (request, response) => {
       "INSERT INTO orders(order_id, description, cost, revenue) VALUES ($1, $2, $3, $4) RETURNING *",
       [order.order_id, order.description, order.cost, order.revenue]
     );
-    response.status(200).json(newOrder.rows[0]).end();
+    response.status(200).json(newOrder.rows[0]);
   } catch (error) {
     console.log("ERROR!", error);
     response.status(500).send("Failed to create order");
@@ -85,7 +85,7 @@ api.post("/api/drivers/new-driver", cors(), async (request, response) => {
       "INSERT INTO drivers(driver_id, first_name, last_name) VALUES ($1, $2, $3) RETURNING *",
       [input.driver_id, input.first_name, input.last_name]
     );
-    response.status(200);
+    response.status(200).json(newDriver.rows[0]);
   } catch (error) {
     console.log("ERROR!", error);
     response.status(500).send("Failed to create driver");
@@ -118,7 +118,7 @@ api.put("/api/orders/move", cors(), async (request, response) => {
       );
     } else {
       // if not, add it to the orders array
-      pool.query(
+      await pool.query(
         "INSERT INTO orders(order_id, description, cost, revenue) VALUES ($1, $2, $3, $4) RETURNING *",
         [order.order_id, order.description, order.cost, order.revenue]
       );

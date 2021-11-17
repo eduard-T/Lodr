@@ -8,7 +8,7 @@ const OrderInput = ({ updateInput, input }) => {
     <>
       <TextInput
         name="description"
-        placeholder="Add the Description..."
+        placeholder="Description..."
         value={input.description}
         borderType="none"
         width={"40%"}
@@ -16,7 +16,7 @@ const OrderInput = ({ updateInput, input }) => {
       />
       <TextInput
         name="cost"
-        placeholder="Cost of the order..."
+        placeholder="Cost..."
         value={input.cost}
         borderType="none"
         width={"30%"}
@@ -24,7 +24,7 @@ const OrderInput = ({ updateInput, input }) => {
       />
       <TextInput
         name="revenue"
-        placeholder="Order revenue..."
+        placeholder="Revenue..."
         value={input.revenue}
         borderType="none"
         width={"30%"}

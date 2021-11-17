@@ -104,9 +104,16 @@ const DriversComponent = ({ data, updateDrivers }) => {
       <div className="drivers__layout">
         {data &&
           !!data.length &&
-          data.map((driver) => {
-            return <SingleDriver driver={driver} key={driver.driver_id} />;
-          })}
+          data
+            .sort((a, b) => {
+              return (
+                a.last_name.localeCompare(b.last_name) ||
+                a.first_name.localeCompare(b.first_name)
+              );
+            })
+            .map((driver) => {
+              return <SingleDriver driver={driver} key={driver.driver_id} />;
+            })}
       </div>
     </section>
   );
