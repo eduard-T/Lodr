@@ -1,4 +1,4 @@
-# Driver Manager App
+# Lodr - Load Management Ecosystem
 
 With this app, users acting as dispatchers can assign orders for drivers to fulfill for clients. Orders can be dragged and dropped to drivers or between them, and existing orders can be unassigned and then edited.
 
